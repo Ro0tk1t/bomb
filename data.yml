@@ -1,0 +1,8 @@
+data: '{"mobile":"<phone>","type":"sms"}'
+dataType: json
+gap: 1
+headers:
+  content-type: application/json;charset=UTF-8
+name: shimo
+needAreaCode: true
+url: https://shimo.im/lizard-api/auth/password/register/send_verification_code
