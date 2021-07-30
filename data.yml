@@ -1,8 +1,9 @@
-data: '{"mobile":"<phone>","type":"sms"}'
-dataType: json
-gap: 1
-headers:
-  content-type: application/json;charset=UTF-8
-name: shimo
-needAreaCode: true
-url: https://shimo.im/lizard-api/auth/password/register/send_verification_code
+- data: '{"mobile":"<phone>","type":"sms"}'
+  datatype: 1
+  gap: 1
+  headers:
+    content-type: application/json;charset=UTF-8
+  method: 1
+  name: shimo
+  needAreaCode: true
+  url: https://shimo.im/lizard-api/auth/password/register/send_verification_code

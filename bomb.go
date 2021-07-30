@@ -1,10 +1,11 @@
 package main
 
 import (
-    "fmt"
+    //"fmt"
     //"encoding/json"
 
     "bomb/cmd"
+    "bomb/core"
     "bomb/utils"
     "bomb/models"
 )
@@ -15,7 +16,8 @@ func main(){
     var test models.API
     test.DataType = 0
 
-    go utils.LoadDatas()
-    fmt.Println(cmd.CF)
+    utils.LoadDatas()
+    utils.ReshapeData()
+    core.StartBomb()
 }
 

@@ -8,7 +8,16 @@ const (
     Xml
 )
 
+type method int
+const (
+    Get method = iota
+    Post
+    Put
+)
+
 var tmap = []string {"string", "json", "xml"}
+var mmap = []string {"get", "post", "put"}
+
 
 type API struct {
     Name string
@@ -19,10 +28,15 @@ type API struct {
     Data string
     NeedAreaCode bool
     AreaCode string
+    Method method
 }
 
 
 func (a *API) GetDataType ()(string) {
     return tmap[a.DataType]
+}
+
+func (a *API) GetMethod ()(string) {
+    return mmap[a.Method]
 }
 
