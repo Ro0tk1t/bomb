@@ -29,6 +29,7 @@ func Execute(){
 
 func init(){
     rootCmd.Flags().StringVarP(&CF, "config", "c", "", "data file")
+    rootCmd.Flags().StringVarP(&Phone, "phone", "p", "", "phone number")
     rootCmd.Flags().StringVarP(&AreaCode, "areacode", "a", "", "the phone number area code, example: +86")
     rootCmd.AddCommand(versionCmd)
 }

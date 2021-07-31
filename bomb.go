@@ -17,7 +17,9 @@ func main(){
     test.DataType = 0
 
     utils.LoadDatas()
-    utils.ReshapeData()
-    core.StartBomb()
+    forever := make(chan struct{})
+    go utils.ReshapeData()
+    go core.StartBomb()
+    <- forever
 }
 

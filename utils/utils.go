@@ -40,9 +40,8 @@ func ReshapeData() {
             if cmd.AreaCode == "" {
                 cmd.AreaCode = "+86"
             }
-            api.Data = strings.Replace(api.Data, "<phone>", cmd.Phone)
         }
+        api.Data = strings.ReplaceAll(api.Data, "<phone>", cmd.Phone)
         fmt.Println(api.Data)
-        //payload = r
     }
 }
