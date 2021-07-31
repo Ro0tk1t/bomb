@@ -10,7 +10,7 @@ import (
 
     "bomb/cmd"
     "bomb/conf"
-    //"bomb/models"
+    "bomb/models"
 )
 
 func LoadDatas(){
@@ -23,11 +23,15 @@ func LoadDatas(){
     } else {
         fmt.Println(err)
     }
+    newDatas := []models.API{}
     for _, api := range conf.Datas {
-        if !strings.Contains(api.Data, "<phone>") {
+        if !strings.Contains(api.Data, "<phone>") && !strings.Contains(api.Url, "<phone>"){
             fmt.Println("[-] data not contains <phone>: ", api.Name)
+        } else {
+            newDatas = append(newDatas, api)
         }
     }
+    conf.Datas = newDatas
 
     fmt.Println(conf.Datas[0].GetMethod())
     fmt.Println(conf.Datas[0].GetDataType())
@@ -42,6 +46,6 @@ func ReshapeData() {
             }
         }
         api.Data = strings.ReplaceAll(api.Data, "<phone>", cmd.Phone)
-        fmt.Println(api.Data)
+        api.Url = strings.ReplaceAll(api.Url, "<phone>", cmd.Phone)
     }
 }

@@ -20,7 +20,7 @@ func StartBomb(){
 func bomb(api models.API) {
     u, err := url.Parse(api.Url)
     if err != nil {
-        fmt.Println("bomb %s url is invalid, will not use this!", api.Url)
+        fmt.Printf("bomb %s url is invalid, will not use this!\n", api.Url)
         return
     }
     sender := NewSender(u.Scheme)
@@ -28,7 +28,7 @@ func bomb(api models.API) {
     gap := api.Gap + cmd.Delay
     for {
         time.Sleep(time.Duration(gap)* time.Second)
-        fmt.Println("bomb %s with %s", cmd.Phone, api.Name)
+        fmt.Printf("bomb %s with %s\n", cmd.Phone, api.Name)
         sender.Run()
     }
 }
