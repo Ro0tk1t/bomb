@@ -31,29 +31,11 @@ type API struct {
     Method method
 }
 
-type Timer struct {
-    // TODO
-    Gap int
-}
-
 type Sender interface {
     Init()
-    Send()
+    SendData()
     Recv()
-}
-
-type Send struct {}
-
-type HttpSender struct {
-    *Send
-}
-
-type HttpsSender struct {
-    *Send
-}
-
-type TcpSender struct {
-    *Send
+    Run()
 }
 
 
@@ -64,4 +46,3 @@ func (a *API) GetDataType ()(string) {
 func (a *API) GetMethod ()(string) {
     return mmap[a.Method]
 }
-

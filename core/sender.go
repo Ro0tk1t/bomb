@@ -2,28 +2,55 @@ package core
 
 import (
     "fmt"
-    "net/http"
+//    "net/http"
 
     "bomb/models"
 )
 
-func Init(s *models.Sender) {
+type Send struct {}
+
+type HttpSender struct {
+    *Send
+}
+
+type HttpsSender struct {
+    *Send
+}
+
+type TcpSender struct {
+    *Send
+}
+
+func (s Send) Init () {
     // TODO
 }
 
-func NewSender(way int) models.Sender {
+func (s Send) SendData () {
+    // TODO
+}
+
+func (s Send) Recv () {
+    //TODO
+}
+
+func (s Send) Run () {
+    // TODO
+}
+
+
+func NewSender(way string) models.Sender {
     fmt.Println("Hello, World!")
     switch way {
     case "http":
-        return &models.HttpSender{}
+        return &HttpSender{}
     case "https": {
-        return &models.HttpsSender{}
+        return &HttpsSender{}
     };
     case "tcp": {
-        return &models.TcpSender{}
+        return &TcpSender{}
     };
     default: {
-        return &models.HttpSender{}
+        return &HttpSender{}
     };
     }
 }

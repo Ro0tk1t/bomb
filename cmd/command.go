@@ -8,6 +8,7 @@ import (
 
 var (
     CF string
+    Delay int
     Phone string
     AreaCode string
 )
@@ -29,6 +30,7 @@ func Execute(){
 
 func init(){
     rootCmd.Flags().StringVarP(&CF, "config", "c", "", "data file")
+    rootCmd.Flags().IntVarP(&Delay, "delay", "d", 0, "delay bomb between requests")
     rootCmd.Flags().StringVarP(&Phone, "phone", "p", "", "phone number")
     rootCmd.Flags().StringVarP(&AreaCode, "areacode", "a", "", "the phone number area code, example: +86")
     rootCmd.AddCommand(versionCmd)
