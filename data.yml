@@ -5,5 +5,5 @@
     content-type: application/json;charset=UTF-8
   method: 1
   name: shimo
-  needAreaCode: true
+  needareacode: true
   url: https://shimo.im/lizard-api/auth/password/register/send_verification_code

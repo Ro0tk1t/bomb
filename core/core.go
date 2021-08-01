@@ -12,7 +12,7 @@ import (
 
 func StartBomb(){
     for _, api := range conf.Datas {
-        go bomb(api)
+        go bomb(*api)
     }
 }
 
@@ -24,12 +24,12 @@ func bomb(api models.API) {
         return
     }
     sender := NewSender(u.Scheme)
-    sender.Run()
+    sender.Run(api)
     gap := api.Gap + cmd.Delay
     for {
         time.Sleep(time.Duration(gap)* time.Second)
         fmt.Printf("bomb %s with %s\n", cmd.Phone, api.Name)
-        sender.Run()
+        sender.Run(api)
     }
 }
 

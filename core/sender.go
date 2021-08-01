@@ -2,9 +2,11 @@ package core
 
 import (
     "fmt"
+    "bytes"
     "strings"
     "net/http"
     "io/ioutil"
+   // "crypto/tls"
 
     "bomb/models"
 )
@@ -27,7 +29,8 @@ func (s Send) Init () {
     // TODO
 }
 
-func (s Send) SendData () {
+func (s *Send) SendData (api models.API) {
+    fmt.Println(api.Url)
     // TODO
 }
 
@@ -36,12 +39,11 @@ func (s Send) Recv () {
 }
 
 func (s *Send) Run (api models.API) {
-    // TODO
+    s.SendData(api)
 }
 
 
 func NewSender(way string) models.Sender {
-    fmt.Println("Hello, World!")
     switch way {
     case "http":
         return &HttpSender{}
@@ -59,6 +61,7 @@ func NewSender(way string) models.Sender {
 
 
 func (h *HttpSender) SendData (api models.API) {
+    fmt.Println("************************")
     switch api.Method {
         case 0: {
             if len(api.Headers) <= 0 {
@@ -72,10 +75,14 @@ func (h *HttpSender) SendData (api models.API) {
                 }
             } else {
                 client := http.Client{}
+                var (
+                    req *http.Request
+                    err error
+                )
                 if api.Data != "" {
-                    req, err := http.NewRequest("GET", api.Url, strings.NewReader(api.Data))
+                    req, err = http.NewRequest("GET", api.Url, strings.NewReader(api.Data))
                 } else {
-                    req, err := http.NewRequest("GET", api.Url, nil)
+                    req, err = http.NewRequest("GET", api.Url, nil)
                 }
                 if err != nil {
                     fmt.Println(err)
@@ -93,6 +100,74 @@ func (h *HttpSender) SendData (api models.API) {
             }
         }
         case 1: {
+            body := []byte(api.Data)
+            req, err := http.NewRequest("POST", api.Url, bytes.NewBuffer(body))
+            client := &http.Client{}
+            if err != nil {
+                fmt.Printf("%v", err)
+            } else {
+                if len(api.Headers) > 0 {
+                    for k, v := range api.Headers {
+                        req.Header.Add(k, v)
+                    }
+                }
+                resp, err := client.Do(req)
+                if err == nil {
+                    defer resp.Body.Close()
+                    body, _ := ioutil.ReadAll(resp.Body)
+                    fmt.Println(resp.Status, body)
+                }
+            }
+        }
+        case 2: {
+            // TODO
+        }
+    }
+}
+
+func (h *HttpsSender) SendData (api models.API) {
+    switch api.Method {
+        case 0: {
+            tr := &http.Transport{}
+            client := &http.Client{Transport: tr}
+            req, err := http.NewRequest("GET", api.Url, nil)
+            if err != nil {
+                fmt.Printf("%v", err)
+            } else {
+                if len(api.Headers) > 0 {
+                    for k, v := range api.Headers {
+                        req.Header.Add(k, v)
+                    }
+                }
+                resp, err := client.Do(req)
+                if err == nil {
+                    defer resp.Body.Close()
+                    body, _ := ioutil.ReadAll(resp.Body)
+                    fmt.Println(resp.Status, body)
+                }
+            }
+        }
+        case 1: {
+            tr := &http.Transport{}
+            client := &http.Client{Transport: tr}
+            req, err := http.NewRequest("POST", api.Url, nil)
+            if err != nil {
+                fmt.Printf("%v", err)
+            } else {
+                if len(api.Headers) > 0 {
+                    for k, v := range api.Headers {
+                        req.Header.Add(k, v)
+                    }
+                }
+                resp, err := client.Do(req)
+                if err == nil {
+                    defer resp.Body.Close()
+                    body, _ := ioutil.ReadAll(resp.Body)
+                    fmt.Println(resp.Status, body)
+                }
+            }
+        }
+        case 2: {
             //
         }
     }

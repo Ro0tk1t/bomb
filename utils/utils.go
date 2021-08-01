@@ -23,7 +23,7 @@ func LoadDatas(){
     } else {
         fmt.Println(err)
     }
-    newDatas := []models.API{}
+    newDatas := []*models.API{}
     for _, api := range conf.Datas {
         if !strings.Contains(api.Data, "<phone>") && !strings.Contains(api.Url, "<phone>"){
             fmt.Println("[-] data not contains <phone>: ", api.Name)
@@ -44,8 +44,11 @@ func ReshapeData() {
             if cmd.AreaCode == "" {
                 cmd.AreaCode = "+86"
             }
+            cmd.Phone = cmd.AreaCode + cmd.Phone
         }
         api.Data = strings.ReplaceAll(api.Data, "<phone>", cmd.Phone)
         api.Url = strings.ReplaceAll(api.Url, "<phone>", cmd.Phone)
+        fmt.Println(api)
     }
+    fmt.Printf("%v\n", conf.Datas)
 }
