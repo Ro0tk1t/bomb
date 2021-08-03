@@ -18,7 +18,7 @@ func main(){
 
     utils.LoadDatas()
     forever := make(chan struct{})
-    go utils.ReshapeData()
+    utils.ReshapeData()
     go core.StartBomb()
     <- forever
 }

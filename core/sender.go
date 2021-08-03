@@ -6,7 +6,7 @@ import (
     "strings"
     "net/http"
     "io/ioutil"
-   // "crypto/tls"
+    "crypto/tls"
 
     "bomb/models"
 )
@@ -14,32 +14,32 @@ import (
 type Send struct {}
 
 type HttpSender struct {
-    *Send
+    Send
 }
 
 type HttpsSender struct {
-    *Send
+    Send
 }
 
 type TcpSender struct {
-    *Send
+    Send
 }
 
 func (s Send) Init () {
     // TODO
 }
 
-func (s *Send) SendData (api models.API) {
-    fmt.Println(api.Url)
-    // TODO
-}
+//func (s *Send) SendData (api models.API) {
+//    fmt.Println(api.Url)
+//    // TODO
+//}
 
 func (s Send) Recv () {
     //TODO
 }
 
 func (s *Send) Run (api models.API) {
-    s.SendData(api)
+//    s.SendData(api)
 }
 
 
@@ -61,7 +61,6 @@ func NewSender(way string) models.Sender {
 
 
 func (h *HttpSender) SendData (api models.API) {
-    fmt.Println("************************")
     switch api.Method {
         case 0: {
             if len(api.Headers) <= 0 {
@@ -71,7 +70,7 @@ func (h *HttpSender) SendData (api models.API) {
                 } else {
                     defer resp.Body.Close()
                     body, _ := ioutil.ReadAll(resp.Body)
-                    fmt.Println(resp.Status, body)
+                    fmt.Println(resp.Status, string(body))
                 }
             } else {
                 client := http.Client{}
@@ -94,7 +93,7 @@ func (h *HttpSender) SendData (api models.API) {
                     if err == nil {
                         defer resp.Body.Close()
                         body, _ := ioutil.ReadAll(resp.Body)
-                        fmt.Println(resp.Status, body)
+                        fmt.Println(resp.Status, string(body))
                     }
                 }
             }
@@ -115,7 +114,7 @@ func (h *HttpSender) SendData (api models.API) {
                 if err == nil {
                     defer resp.Body.Close()
                     body, _ := ioutil.ReadAll(resp.Body)
-                    fmt.Println(resp.Status, body)
+                    fmt.Println(resp.Status, string(body))
                 }
             }
         }
@@ -143,14 +142,17 @@ func (h *HttpsSender) SendData (api models.API) {
                 if err == nil {
                     defer resp.Body.Close()
                     body, _ := ioutil.ReadAll(resp.Body)
-                    fmt.Println(resp.Status, body)
+                    fmt.Println(resp.Status, string(body))
                 }
             }
         }
         case 1: {
-            tr := &http.Transport{}
+            tr := &http.Transport{
+                TLSClientConfig:&tls.Config{InsecureSkipVerify: true},
+            }
             client := &http.Client{Transport: tr}
-            req, err := http.NewRequest("POST", api.Url, nil)
+            body := []byte(api.Data)
+            req, err := http.NewRequest("POST", api.Url, bytes.NewBuffer(body))
             if err != nil {
                 fmt.Printf("%v", err)
             } else {
@@ -163,12 +165,27 @@ func (h *HttpsSender) SendData (api models.API) {
                 if err == nil {
                     defer resp.Body.Close()
                     body, _ := ioutil.ReadAll(resp.Body)
-                    fmt.Println(resp.Status, body)
+                    fmt.Println(resp.Status, string(body))
                 }
             }
         }
         case 2: {
-            //
+            // TODO
         }
     }
 }
+
+func (h *HttpsSender) Init () {}
+func (h *HttpsSender) Recv () {}
+func (h *HttpsSender) Run (api models.API) {
+    h.SendData(api)
+}
+func (h *HttpSender) Run (api models.API) {
+    h.SendData(api)
+}
+
+func (t *TcpSender) SendData (api models.API) {
+    fmt.Println(api.Url)
+    // TODO
+}
+

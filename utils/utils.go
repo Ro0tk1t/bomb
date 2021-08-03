@@ -48,7 +48,5 @@ func ReshapeData() {
         }
         api.Data = strings.ReplaceAll(api.Data, "<phone>", cmd.Phone)
         api.Url = strings.ReplaceAll(api.Url, "<phone>", cmd.Phone)
-        fmt.Println(api)
     }
-    fmt.Printf("%v\n", conf.Datas)
 }
