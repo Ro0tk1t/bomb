@@ -31,10 +31,8 @@ func LoadDatas(){
             newDatas = append(newDatas, api)
         }
     }
-    conf.Datas = newDatas
 
-    fmt.Println(conf.Datas[0].GetMethod())
-    fmt.Println(conf.Datas[0].GetDataType())
+    conf.Datas = newDatas
 }
 
 

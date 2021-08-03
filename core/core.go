@@ -29,7 +29,7 @@ func bomb(api *models.API) {
     for {
         time.Sleep(time.Duration(gap)* time.Second)
         fmt.Printf("bomb %s with %s\n", cmd.Phone, api.Name)
-        //sender.Run(api)
+        sender.Run(*api)
     }
 }
 

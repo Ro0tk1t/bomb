@@ -11,54 +11,17 @@ import (
     "bomb/models"
 )
 
-type Send struct {}
 
 type HttpSender struct {
-    Send
 }
 
 type HttpsSender struct {
-    Send
 }
 
 type TcpSender struct {
-    Send
 }
 
-func (s Send) Init () {
-    // TODO
-}
-
-//func (s *Send) SendData (api models.API) {
-//    fmt.Println(api.Url)
-//    // TODO
-//}
-
-func (s Send) Recv () {
-    //TODO
-}
-
-func (s *Send) Run (api models.API) {
-//    s.SendData(api)
-}
-
-
-func NewSender(way string) models.Sender {
-    switch way {
-    case "http":
-        return &HttpSender{}
-    case "https": {
-        return &HttpsSender{}
-    };
-    case "tcp": {
-        return &TcpSender{}
-    };
-    default: {
-        return &HttpSender{}
-    }
-    }
-}
-
+func (h HttpSender) Init() {}
 
 func (h *HttpSender) SendData (api models.API) {
     switch api.Method {
@@ -124,10 +87,18 @@ func (h *HttpSender) SendData (api models.API) {
     }
 }
 
+func (h *HttpSender) Run (api models.API) {
+    h.SendData(api)
+}
+
+func (h *HttpsSender) Init () {}
+
 func (h *HttpsSender) SendData (api models.API) {
     switch api.Method {
         case 0: {
-            tr := &http.Transport{}
+            tr := &http.Transport{
+                TLSClientConfig:&tls.Config{InsecureSkipVerify: true},
+            }
             client := &http.Client{Transport: tr}
             req, err := http.NewRequest("GET", api.Url, nil)
             if err != nil {
@@ -175,17 +146,34 @@ func (h *HttpsSender) SendData (api models.API) {
     }
 }
 
-func (h *HttpsSender) Init () {}
-func (h *HttpsSender) Recv () {}
 func (h *HttpsSender) Run (api models.API) {
     h.SendData(api)
 }
-func (h *HttpSender) Run (api models.API) {
-    h.SendData(api)
-}
+
+func (t *TcpSender) Init () {}
 
 func (t *TcpSender) SendData (api models.API) {
     fmt.Println(api.Url)
     // TODO
+}
+
+func (t *TcpSender) Run (api models.API) {
+    t.SendData(api)
+}
+
+func NewSender(way string) models.Sender {
+    switch way {
+    case "http":
+        return &HttpSender{}
+    case "https": {
+        return &HttpsSender{}
+    };
+    case "tcp": {
+        return &TcpSender{}
+    };
+    default: {
+        return &HttpSender{}
+    }
+    }
 }
 

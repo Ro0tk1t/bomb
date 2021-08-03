@@ -34,7 +34,7 @@ type API struct {
 type Sender interface {
     Init()
     SendData(API)
-    Recv()
+    //Recv()
     Run(API)
 }
 
