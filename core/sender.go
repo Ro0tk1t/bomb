@@ -8,6 +8,7 @@ import (
     "io/ioutil"
     "crypto/tls"
 
+    "bomb/utils"
     "bomb/models"
 )
 
@@ -26,38 +27,28 @@ func (h HttpSender) Init() {}
 func (h *HttpSender) SendData (api models.API) {
     switch api.Method {
         case 0: {
-            if len(api.Headers) <= 0 {
-                resp, err := http.Get(api.Url)
-                if err != nil {
-                    fmt.Printf("bomb error: %v\n", err)
-                } else {
+            client := http.Client{}
+            var (
+                req *http.Request
+                err error
+            )
+            if api.Data != "" {
+                req, err = http.NewRequest("GET", api.Url, strings.NewReader(api.Data))
+            } else {
+                req, err = http.NewRequest("GET", api.Url, nil)
+            }
+            if err != nil {
+                fmt.Println(err)
+            } else {
+                for k, v := range api.Headers {
+                    req.Header.Add(k, v)
+                }
+                req.Header.Add("user-agent", utils.GetRandUA())
+                resp, err := client.Do(req)
+                if err == nil {
                     defer resp.Body.Close()
                     body, _ := ioutil.ReadAll(resp.Body)
                     fmt.Println(resp.Status, string(body))
-                }
-            } else {
-                client := http.Client{}
-                var (
-                    req *http.Request
-                    err error
-                )
-                if api.Data != "" {
-                    req, err = http.NewRequest("GET", api.Url, strings.NewReader(api.Data))
-                } else {
-                    req, err = http.NewRequest("GET", api.Url, nil)
-                }
-                if err != nil {
-                    fmt.Println(err)
-                } else {
-                    for k, v := range api.Headers {
-                        req.Header.Add(k, v)
-                    }
-                    resp, err := client.Do(req)
-                    if err == nil {
-                        defer resp.Body.Close()
-                        body, _ := ioutil.ReadAll(resp.Body)
-                        fmt.Println(resp.Status, string(body))
-                    }
                 }
             }
         }
@@ -72,6 +63,7 @@ func (h *HttpSender) SendData (api models.API) {
                     for k, v := range api.Headers {
                         req.Header.Add(k, v)
                     }
+                    req.Header.Add("user-agent", utils.GetRandUA())
                 }
                 resp, err := client.Do(req)
                 if err == nil {
@@ -131,6 +123,7 @@ func (h *HttpsSender) SendData (api models.API) {
                     for k, v := range api.Headers {
                         req.Header.Add(k, v)
                     }
+                    req.Header.Add("user-agent", utils.GetRandUA())
                 }
                 resp, err := client.Do(req)
                 if err == nil {

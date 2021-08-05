@@ -3,8 +3,10 @@ package utils
 import (
     "os"
     "fmt"
+    "time"
     "strings"
     "io/ioutil"
+    "math/rand"
 
     "gopkg.in/yaml.v3"
 
@@ -47,4 +49,9 @@ func ReshapeData() {
         api.Data = strings.ReplaceAll(api.Data, "<phone>", cmd.Phone)
         api.Url = strings.ReplaceAll(api.Url, "<phone>", cmd.Phone)
     }
+}
+
+func GetRandUA() string {
+    rand.Seed(time.Now().UnixNano())
+    return conf.UAs[rand.Intn(len(conf.UAs))]
 }
