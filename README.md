@@ -67,3 +67,4 @@ url: url
 
 > 数据类型：0代表字符串，1代表json，2代表xml  
 > http方法：0代表get，1代表post，2代表put  
+> 接口里`<phone>`代表手机号的占位符，且`data`或`url`里必须要存在一个
